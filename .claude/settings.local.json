@@ -3,7 +3,8 @@
     "allow": [
       "Bash(node:*)",
       "Bash(npm start)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": []

@@ -57,12 +57,18 @@ Add to your MCP client configuration:
 ## Development
 
 ```bash
-git clone https://github.com/your-repo/gemini-search.git
+git clone https://github.com/z23cc/gemini-search.git
 cd gemini-search
 npm install
 npm start
 ```
 
+## Author
+
+**z23cc** <admin@z23.cc>
+
+- GitHub: [@z23cc](https://github.com/z23cc)
+
 ## License
 
-Apache License 2.0
+MIT License

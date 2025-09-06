@@ -12,10 +12,20 @@
   },
   "keywords": [
     "mcp",
-    "google-search"
+    "google-search",
+    "gemini",
+    "search"
   ],
-  "author": "",
+  "author": "z23cc <admin@z23.cc>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/z23cc/gemini-search.git"
+  },
+  "bugs": {
+    "url": "https://github.com/z23cc/gemini-search/issues"
+  },
+  "homepage": "https://github.com/z23cc/gemini-search#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4"
   }
