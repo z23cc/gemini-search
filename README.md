@@ -1,10 +1,11 @@
 # Gemini Search
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides Google Search functionality.
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides Google Search functionality using Gemini's search capabilities.
 
 ## Features
 
-- Real-time web search results
+- Real-time web search results with Google Search integration
+- Uses [api-key.info](https://api-key.info) service with Gemini-compatible API
 - Compliant with MCP standard protocol
 - Supports stdio transport
 - Lightweight single-file implementation
@@ -12,7 +13,7 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that pr
 ## Requirements
 
 - Node.js 18 or later
-- API key
+- API key from [api-key.info](https://api-key.info) (Gemini-compatible service)
 
 ## Installation
 
