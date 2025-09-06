@@ -4,7 +4,9 @@
       "Bash(node:*)",
       "Bash(npm start)",
       "Bash(chmod:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(GEMINI_API_KEY=sk-test timeout 1 npm start)",
+      "Bash(npm pack:*)"
     ],
     "deny": [],
     "ask": []

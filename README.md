@@ -27,7 +27,7 @@ npm install -g gemini-search
 
 ```bash
 export GEMINI_API_KEY="your-api-key-here"
-export GEMINI_MODEL="gemini-2.5-flash"  # Optional (default: gemini-2.5-flash)
+export GEMINI_MODEL="gemini-2.5-pro"  # Optional (default: gemini-2.5-pro)
 ```
 
 ### Claude Code Configuration
