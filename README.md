@@ -26,15 +26,22 @@ npm install -g gemini-search
 ### Environment Variables
 
 ```bash
-export GEMINI_API_KEY="your-api-key-here"
-export GEMINI_MODEL="gemini-2.5-pro"  # Optional (default: gemini-2.5-pro)
+export GEMINI_API_KEY="your-api-key-here"                                    # Required
+export GEMINI_MODEL="gemini-2.5-pro"                                        # Optional (default: gemini-2.5-pro)
+export GEMINI_BASE_URL="https://api-key.info"                               # Optional (default: https://api-key.info)
 ```
 
 ### Claude Code Configuration
 
 ```bash
-# Add to user scope
+# Add to user scope with minimal configuration
 claude config add-server gemini-search npm:gemini-search --env GEMINI_API_KEY=your-api-key
+
+# Add with custom model and base URL
+claude config add-server gemini-search npm:gemini-search \
+  --env GEMINI_API_KEY=your-api-key \
+  --env GEMINI_MODEL=gemini-2.5-pro \
+  --env GEMINI_BASE_URL=https://api-key.info
 ```
 
 ### Manual Configuration
@@ -48,7 +55,9 @@ Add to your MCP client configuration:
       "command": "npx",
       "args": ["gemini-search"],
       "env": {
-        "GEMINI_API_KEY": "your-api-key-here"
+        "GEMINI_API_KEY": "your-api-key-here",
+        "GEMINI_MODEL": "gemini-2.5-pro",
+        "GEMINI_BASE_URL": "https://api-key.info"
       }
     }
   }

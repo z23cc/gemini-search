@@ -12,14 +12,17 @@ import {
 // Google Search implementation
 function createGoogleSearchAI() {
   const apiKey = process.env.GEMINI_API_KEY;
+  const model = process.env.GEMINI_MODEL || 'gemini-2.5-pro';
+  const baseUrl = process.env.GEMINI_BASE_URL || 'https://api-key.info';
+  
   if (!apiKey) {
-    throw new Error('GEMINI_API_KEY environment variable is required');
+    throw new Error('GEMINI_API_KEY environment variable is required. Get your API key from https://api-key.info');
   }
-  return { apiKey };
+  return { apiKey, model, baseUrl };
 }
 
 async function searchGoogle(api, params) {
-  const response = await fetch(`https://api-key.info/v1beta/models/gemini-2.5-pro:generateContent?key=${api.apiKey}`, {
+  const response = await fetch(`${api.baseUrl}/v1beta/models/${api.model}:generateContent?key=${api.apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -58,13 +61,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: "google_search",
-        description: "Performs a web search using Google Search and returns the results.",
+        description: "Performs a web search using Google Search (via the Gemini API) and returns the results. This tool is useful for finding information on the internet based on a query.",
         inputSchema: {
           type: "object",
           properties: {
             query: {
               type: "string",
-              description: "The search query.",
+              description: "The search query to find information on the web.",
             },
           },
           required: ["query"],
@@ -78,12 +81,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (request.params.name !== "google_search") {
     throw new McpError(
       ErrorCode.MethodNotFound,
-      `Unknown tool: ${request.params.name}`
+      `Unknown tool: ${request.params.name}. Available tools: google_search`
     );
   }
 
   if (!request.params.arguments) {
-    throw new McpError(ErrorCode.InvalidParams, "Missing arguments");
+    throw new McpError(ErrorCode.InvalidParams, "Missing arguments. Required: query (string)");
   }
 
   const args = request.params.arguments;
@@ -91,7 +94,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (typeof args.query !== "string") {
     throw new McpError(
       ErrorCode.InvalidParams,
-      "Invalid arguments: query must be a string"
+      "Invalid arguments: query must be a string. Example: { \"query\": \"search terms\" }"
     );
   }
 
@@ -101,7 +104,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   } catch (error) {
     throw new McpError(
       ErrorCode.InternalError,
-      `Search failed: ${error instanceof Error ? error.message : "Unknown error"}`
+      `Google Search failed: ${error instanceof Error ? error.message : "Unknown error"}. Please check your GEMINI_API_KEY and network connection.`
     );
   }
 });
@@ -109,7 +112,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Gemini Search server running on stdio");
+  console.error("Gemini Search MCP server running on stdio - Google Search via Gemini API");
 }
 
 main().catch((error) => {
