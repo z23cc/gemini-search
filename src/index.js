@@ -22,24 +22,49 @@ function createGoogleSearchAI() {
 }
 
 async function searchGoogle(api, params) {
-  const response = await fetch(`${api.baseUrl}/v1beta/models/${api.model}:generateContent?key=${api.apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{
-        role: "user", 
-        parts: [{ text: params.query }]
-      }],
-      tools: [{ googleSearch: {} }]
-    })
-  });
-
-  const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No results found';
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 500000); // 500 second timeout
   
-  return {
-    content: [{ type: "text", text }]
-  };
+  try {
+    const response = await fetch(`${api.baseUrl}/v1beta/models/${api.model}:generateContent?key=${api.apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          role: "user", 
+          parts: [{ text: params.query }]
+        }],
+        tools: [{ googleSearch: {} }]
+      }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.error.message || 'API returned an error');
+    }
+
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No results found';
+    
+    return {
+      content: [{ type: "text", text }]
+    };
+  } catch (error) {
+    clearTimeout(timeoutId);
+    
+    if (error.name === 'AbortError') {
+      throw new Error('Request timed out after 500 seconds');
+    }
+    
+    throw error;
+  }
 }
 
 const server = new Server(
